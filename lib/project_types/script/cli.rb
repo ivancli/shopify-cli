@@ -29,6 +29,7 @@ module Script
   module Layers
     module Application
       autoload :BuildScript, Project.project_filepath("layers/application/build_script")
+      autoload :ConnectApp, Project.project_filepath("layers/application/connect_app")
       autoload :CreateScript, Project.project_filepath("layers/application/create_script")
       autoload :PushScript, Project.project_filepath("layers/application/push_script")
       autoload :ExtensionPoints, Project.project_filepath("layers/application/extension_points")
