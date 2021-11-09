@@ -18,6 +18,7 @@ module Script
 
   # define/autoload project specific Forms
   module Forms
+    autoload :Connect, Project.project_filepath("forms/connect")
     autoload :Create, Project.project_filepath("forms/create")
     autoload :ScriptForm, Project.project_filepath("forms/script_form")
   end

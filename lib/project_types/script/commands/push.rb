@@ -14,10 +14,11 @@ module Script
         # fresh_env = Tasks::EnsureEnv.call(@ctx)
 
         # first, we need to perform all the CLI actions here, within the command class
-        against_shopify_org = wants_to_run_against_shopify_org?
+        # since we need to ask the user for input, we should actually gather this info in a form
+        form = Forms::Connect.ask(@ctx, nil, options.flags)
 
         # second, we need to perform all the follow up logic in our application-layer, in ConnectApp.
-        fresh_env = Layers::Application::ConnectApp.call(ctx: @ctx, against_shopify_org: against_shopify_org)
+        fresh_env = Layers::Application::ConnectApp.call(ctx: @ctx, form: form)
 
         # third, perform the same force-check
         force = options.flags.key?(:force) || !!fresh_env
@@ -34,13 +35,6 @@ module Script
           @ctx.message("script.push.error.operation_failed_no_api_key")
         end
         UI::ErrorHandler.pretty_print_and_raise(e, failed_op: msg)
-      end
-
-      # copied from lib/shopify_cli/task.rb
-      def wants_to_run_against_shopify_org?
-        @ctx.puts(@ctx.message("core.tasks.select_org_and_shop.identified_as_shopify"))
-        message = @ctx.message("core.tasks.select_org_and_shop.first_party")
-        CLI::UI::Prompt.confirm(message, default: false)
       end
 
       def self.help
