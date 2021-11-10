@@ -60,7 +60,7 @@ module Script
       # copied from lib/shopify_cli/task.rb
       # should probably just invoke it directly from there
       def wants_to_run_against_shopify_org?
-        task = ShopifyCLI::Task.new().wants_to_run_against_shopify_org?(ctx:@ctx)
+        ShopifyCLI::Task.new.wants_to_run_against_shopify_org?(ctx: @ctx)
         # @ctx.puts(@ctx.message("core.tasks.select_org_and_shop.identified_as_shopify"))
         # message = @ctx.message("core.tasks.select_org_and_shop.first_party")
         # CLI::UI::Prompt.confirm(message, default: false)

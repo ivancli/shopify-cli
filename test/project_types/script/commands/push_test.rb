@@ -21,10 +21,10 @@ module Script
           env: @env
         )
         @app = {
-            "title" => "test_app",
-            "apiKey" => @api_key,
-            "apiSecretKeys" => [{ "secret" => @secret }],
-            "appType" => "custom",
+          "title" => "test_app",
+          "apiKey" => @api_key,
+          "apiSecretKeys" => [{ "secret" => @secret }],
+          "appType" => "custom",
         }
 
         Script::Layers::Infrastructure::ScriptProjectRepository.stubs(:new).returns(@script_project_repo)
@@ -81,13 +81,12 @@ module Script
         @form = mock(app: @app, uuid: @uuid)
         Forms::Connect.expects(:ask).returns(@form)
         Layers::Application::ConnectApp.expects(:call).with(ctx: @context, app: @app, uuid: @uuid).returns(true)
-        
+
         Layers::Application::PushScript.expects(:call).with(ctx: @context, force: true)
         perform_command
       end
 
       def test_push_doesnt_print_api_key_when_it_hasnt_been_selected
-
         @form = mock(app: @app, uuid: @uuid)
         Forms::Connect.expects(:ask).returns(@form)
         Layers::Application::ConnectApp.expects(:call).with(ctx: @context, app: @app, uuid: @uuid)
@@ -105,7 +104,7 @@ module Script
         @form = mock(app: @app, uuid: @uuid)
         Forms::Connect.expects(:ask).returns(@form)
         Layers::Application::ConnectApp.expects(:call).with(ctx: @context, app: @app, uuid: @uuid)
-        
+
         Layers::Application::PushScript.expects(:call).raises(StandardError.new)
 
         UI::ErrorHandler.expects(:pretty_print_and_raise).with do |_error, args|
