@@ -18,7 +18,7 @@ module Script
         form = Forms::Connect.ask(@ctx, nil, options.flags)
 
         # second, we need to perform all the follow up logic in our application-layer, in ConnectApp.
-        fresh_env = Layers::Application::ConnectApp.call(ctx: @ctx, form: form)
+        fresh_env = Layers::Application::ConnectApp.call(ctx: @ctx, app: form.app, uuid: form.uuid)
 
         # third, perform the same force-check
         force = options.flags.key?(:force) || !!fresh_env
