@@ -50,7 +50,7 @@ module Script
         Script::Command::Push.help
       end
 
-      def test_push_propagates_error_when_ensure_env_fails
+      def test_push_propagates_error_when_connect_fails
         err_msg = "error message"
 
         Layers::Application::ConnectApp
@@ -63,9 +63,9 @@ module Script
       end
 
       def test_does_not_force_push_if_user_env_already_existed
-
         @force = false
-        Layers::Application::PushScript.expects(:call).with(ctx: @context, force: @force)
+        Layers::Application::ConnectApp.expects(:call).with(ctx: @context, app: @app, uuid: @uuid).returns(false)
+        Layers::Application::PushScript.expects(:call).with(ctx: @context, force: false)
         perform_command
       end
 
