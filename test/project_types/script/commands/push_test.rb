@@ -27,15 +27,14 @@ module Script
           "appType" => "custom",
         }
         @form = OpenStruct.new(app: @app, uuid: @uuid)
+        Forms::Connect.stubs(:ask).returns(@form)
+        Layers::Application::ConnectApp.stubs(:call).with(ctx: @context, app: @app, uuid: @uuid)
 
         Script::Layers::Infrastructure::ScriptProjectRepository.stubs(:new).returns(@script_project_repo)
         ShopifyCLI::Tasks::EnsureProjectType.stubs(:call).with(@context, :script).returns(true)
       end
 
       def test_calls_push_script
-        Forms::Connect.expects(:ask).returns(@form)
-        Layers::Application::ConnectApp.expects(:call).with(ctx: @context, app: @app, uuid: @uuid)
-
         Layers::Application::PushScript.expects(:call).with(ctx: @context, force: @force)
 
         @context
@@ -53,7 +52,6 @@ module Script
 
       def test_push_propagates_error_when_ensure_env_fails
         err_msg = "error message"
-        Forms::Connect.expects(:ask).returns(@form)
 
         Layers::Application::ConnectApp
           .expects(:call)
@@ -65,8 +63,6 @@ module Script
       end
 
       def test_does_not_force_push_if_user_env_already_existed
-        Forms::Connect.expects(:ask).returns(@form)
-        Layers::Application::ConnectApp.expects(:call).with(ctx: @context, app: @app, uuid: @uuid)
 
         @force = false
         Layers::Application::PushScript.expects(:call).with(ctx: @context, force: @force)
@@ -75,18 +71,12 @@ module Script
 
       def test_force_pushes_script_if_user_env_was_just_created
         @force = false
-
-        Forms::Connect.expects(:ask).returns(@form)
         Layers::Application::ConnectApp.expects(:call).with(ctx: @context, app: @app, uuid: @uuid).returns(true)
-
         Layers::Application::PushScript.expects(:call).with(ctx: @context, force: true)
         perform_command
       end
 
       def test_push_doesnt_print_api_key_when_it_hasnt_been_selected
-        Forms::Connect.expects(:ask).returns(@form)
-        Layers::Application::ConnectApp.expects(:call).with(ctx: @context, app: @app, uuid: @uuid)
-
         @script_project_repo.expects(:get).returns(nil)
 
         UI::ErrorHandler.expects(:pretty_print_and_raise).with do |_error, args|
@@ -97,9 +87,6 @@ module Script
       end
 
       def test_push_prints_api_key_when_it_has_been_selected
-        Forms::Connect.expects(:ask).returns(@form)
-        Layers::Application::ConnectApp.expects(:call).with(ctx: @context, app: @app, uuid: @uuid)
-
         Layers::Application::PushScript.expects(:call).raises(StandardError.new)
 
         UI::ErrorHandler.expects(:pretty_print_and_raise).with do |_error, args|
