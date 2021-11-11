@@ -26,13 +26,13 @@ module Script
           "apiSecretKeys" => [{ "secret" => @secret }],
           "appType" => "custom",
         }
+        @form = OpenStruct.new(app: @app, uuid: @uuid)
 
         Script::Layers::Infrastructure::ScriptProjectRepository.stubs(:new).returns(@script_project_repo)
         ShopifyCLI::Tasks::EnsureProjectType.stubs(:call).with(@context, :script).returns(true)
       end
 
       def test_calls_push_script
-        @form = mock(app: @app, uuid: @uuid)
         Forms::Connect.expects(:ask).returns(@form)
         Layers::Application::ConnectApp.expects(:call).with(ctx: @context, app: @app, uuid: @uuid)
 
@@ -53,7 +53,6 @@ module Script
 
       def test_push_propagates_error_when_ensure_env_fails
         err_msg = "error message"
-        @form = mock(app: @app, uuid: @uuid)
         Forms::Connect.expects(:ask).returns(@form)
 
         Layers::Application::ConnectApp
@@ -66,7 +65,6 @@ module Script
       end
 
       def test_does_not_force_push_if_user_env_already_existed
-        @form = mock(app: @app, uuid: @uuid)
         Forms::Connect.expects(:ask).returns(@form)
         Layers::Application::ConnectApp.expects(:call).with(ctx: @context, app: @app, uuid: @uuid)
 
@@ -78,7 +76,6 @@ module Script
       def test_force_pushes_script_if_user_env_was_just_created
         @force = false
 
-        @form = mock(app: @app, uuid: @uuid)
         Forms::Connect.expects(:ask).returns(@form)
         Layers::Application::ConnectApp.expects(:call).with(ctx: @context, app: @app, uuid: @uuid).returns(true)
 
@@ -87,7 +84,6 @@ module Script
       end
 
       def test_push_doesnt_print_api_key_when_it_hasnt_been_selected
-        @form = mock(app: @app, uuid: @uuid)
         Forms::Connect.expects(:ask).returns(@form)
         Layers::Application::ConnectApp.expects(:call).with(ctx: @context, app: @app, uuid: @uuid)
 
@@ -101,7 +97,6 @@ module Script
       end
 
       def test_push_prints_api_key_when_it_has_been_selected
-        @form = mock(app: @app, uuid: @uuid)
         Forms::Connect.expects(:ask).returns(@form)
         Layers::Application::ConnectApp.expects(:call).with(ctx: @context, app: @app, uuid: @uuid)
 
