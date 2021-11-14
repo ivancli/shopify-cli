@@ -3,7 +3,6 @@
 require "project_types/script/test_helper"
 
 describe Script::Layers::Application::ConnectApp do
-
   let(:script_name) { "script_name" }
   let(:language) { "typescript" }
   let(:extension_point_type) { "payment-methods" }
@@ -18,7 +17,7 @@ describe Script::Layers::Application::ConnectApp do
     )
   end
 
-  let(:app) do 
+  let(:app) do
     {
       "title" => "app_title",
       "apiKey" => "api_key",
@@ -61,13 +60,13 @@ describe Script::Layers::Application::ConnectApp do
     end
 
     describe "when env already has all required fields" do
-      let(:env) { 
+      let(:env) do
         ShopifyCLI::Resources::EnvFile.new(
-          api_key: "api_key", 
-          secret: "shh", 
+          api_key: "api_key",
+          secret: "shh",
           extra: { "UUID" => "uuid" }
-          ) 
-        }
+        )
+      end
 
       it "returns true" do
         assert subject
@@ -75,12 +74,12 @@ describe Script::Layers::Application::ConnectApp do
     end
 
     describe "when env is missing uuid" do
-      let(:env) { 
+      let(:env) do
         ShopifyCLI::Resources::EnvFile.new(
-          api_key: "api_key", 
-          secret: "shh", 
-          ) 
-        }
+          api_key: "api_key",
+          secret: "shh",
+        )
+      end
 
       it "returns false" do
         refute subject
@@ -94,7 +93,5 @@ describe Script::Layers::Application::ConnectApp do
         refute subject
       end
     end
-
   end
-  
 end

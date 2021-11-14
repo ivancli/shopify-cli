@@ -25,8 +25,8 @@ module Script
           form = Forms::Connect.ask(@ctx, nil, options.flags)
           # second, we need to perform all the follow up logic in our application-layer, in ConnectApp.
           Layers::Application::ConnectApp.call(
-            script_project_repo: script_project_repo, 
-            app: form.app, 
+            script_project_repo: script_project_repo,
+            app: form.app,
             uuid: form.uuid
           )
         end
