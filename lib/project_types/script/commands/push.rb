@@ -13,12 +13,26 @@ module Script
         # old call to a task, to be replaced
         # fresh_env = Tasks::EnsureEnv.call(@ctx)
 
-        # first, we need to perform all the CLI actions here, within the command class
-        # since we need to ask the user for input, we should actually gather this info in a form
-        form = Forms::Connect.ask(@ctx, nil, options.flags)
+        # determine if we need to invoke the form
+        script_project_repo = Layers::Infrastructure::ScriptProjectRepository.new(ctx: @ctx)
+        script_project = script_project_repo.get
+        fresh_env = !Layers::Application::ConnectApp.env_valid?(script_project: script_project)
 
-        # second, we need to perform all the follow up logic in our application-layer, in ConnectApp.
-        fresh_env = Layers::Application::ConnectApp.call(ctx: @ctx, app: form.app, uuid: form.uuid)
+        # We need to check to decide to invoke the form
+        if fresh_env
+          # first, we need to perform all the CLI actions here, within the command class
+          # since we need to ask the user for input, we should actually gather this info in a form
+          form = Forms::Connect.ask(@ctx, nil, options.flags)
+          # second, we need to perform all the follow up logic in our application-layer, in ConnectApp.
+          Layers::Application::ConnectApp.call(
+            script_project_repo: script_project_repo, 
+            app: form.app, 
+            uuid: form.uuid
+          )
+        end
+
+        # require 'pry'
+        # binding.pry
 
         # third, perform the same force-check
         force = options.flags.key?(:force) || !!fresh_env
