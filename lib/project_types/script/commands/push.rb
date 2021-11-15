@@ -31,9 +31,6 @@ module Script
           )
         end
 
-        # require 'pry'
-        # binding.pry
-
         # third, perform the same force-check
         force = options.flags.key?(:force) || !!fresh_env
 
