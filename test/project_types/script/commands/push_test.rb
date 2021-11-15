@@ -28,7 +28,6 @@ module Script
         }
         @form = stub(app: @app, uuid: @uuid)
         Forms::Connect.stubs(:ask).returns(@form)
-        Layers::Application::ConnectApp.stubs(:call).with(ctx: @context, app: @app, uuid: @uuid)
 
         Script::Layers::Infrastructure::ScriptProjectRepository.stubs(:new).returns(@script_project_repo)
         ShopifyCLI::Tasks::EnsureProjectType.stubs(:call).with(@context, :script).returns(true)
@@ -55,11 +54,6 @@ module Script
         Layers::Application::ConnectApp.stubs(env_valid?: false)
         Layers::Application::ConnectApp
           .expects(:call)
-          .with(
-            script_project_repo: @script_project_repo,
-            app: @app,
-            uuid: @uuid
-          )
           .raises(StandardError.new(err_msg))
 
         e = assert_raises(StandardError) { perform_command }

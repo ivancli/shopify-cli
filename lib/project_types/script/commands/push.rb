@@ -26,7 +26,8 @@ module Script
           # second, we need to perform all the follow up logic in our application-layer, in ConnectApp.
           Layers::Application::ConnectApp.call(
             script_project_repo: script_project_repo,
-            app: form.app,
+            api_key: form.app["apiKey"],
+            secret: form.app["apiSecretKeys"].first["secret"],
             uuid: form.uuid
           )
         end

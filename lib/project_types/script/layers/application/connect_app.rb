@@ -7,12 +7,10 @@ module Script
     module Application
       class ConnectApp
         class << self
-          attr_accessor :ctx
-
-          def call(script_project_repo:, app:, uuid:)
+          def call(script_project_repo:, api_key:, secret:, uuid:)
             script_project_repo.create_env(
-              api_key: app["apiKey"],
-              secret: app["apiSecretKeys"].first["secret"],
+              api_key: api_key,
+              secret: secret,
               uuid: uuid
             )
           end

@@ -25,6 +25,8 @@ describe Script::Layers::Application::ConnectApp do
       "appType" => "custom",
     }
   end
+  let(:api_key) { "apikey" }
+  let(:secret) { "shh" }
   let(:uuid) { "uuid" }
 
   before do
@@ -35,7 +37,8 @@ describe Script::Layers::Application::ConnectApp do
     subject do
       Script::Layers::Application::ConnectApp.call(
         script_project_repo: script_project_repository,
-        app: app,
+        api_key: api_key,
+        secret: secret,
         uuid: uuid,
       )
     end
@@ -44,8 +47,8 @@ describe Script::Layers::Application::ConnectApp do
       script_project_repository
         .expects(:create_env)
         .with(
-          api_key: app["apiKey"],
-          secret: app["apiSecretKeys"].first["secret"],
+          api_key: api_key,
+          secret: secret,
           uuid: uuid
         )
       subject
@@ -62,9 +65,9 @@ describe Script::Layers::Application::ConnectApp do
     describe "when env already has all required fields" do
       let(:env) do
         ShopifyCLI::Resources::EnvFile.new(
-          api_key: "api_key",
-          secret: "shh",
-          extra: { "UUID" => "uuid" }
+          api_key: api_key,
+          secret: secret,
+          extra: { "UUID" => uuid }
         )
       end
 
@@ -76,8 +79,8 @@ describe Script::Layers::Application::ConnectApp do
     describe "when env is missing uuid" do
       let(:env) do
         ShopifyCLI::Resources::EnvFile.new(
-          api_key: "api_key",
-          secret: "shh",
+          api_key: api_key,
+          secret: secret,
         )
       end
 
