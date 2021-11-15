@@ -15,7 +15,7 @@ describe Script::Forms::Connect do
 
     subject do
       result = nil
-      capture_io { result = Script::Forms::Connect.ask(context, nil , {}) }
+      capture_io { result = Script::Forms::Connect.ask(context, nil, {}) }
       result
     end
 
