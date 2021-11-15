@@ -52,10 +52,14 @@ module Script
 
       def test_push_propagates_error_when_connect_fails
         err_msg = "error message"
-
+        Layers::Application::ConnectApp.stubs(env_valid?: false)
         Layers::Application::ConnectApp
           .expects(:call)
-          .with(ctx: @context, app: @app, uuid: @uuid)
+          .with(
+            script_project_repo: @script_project_repo,
+            app: @app,
+            uuid: @uuid
+          )
           .raises(StandardError.new(err_msg))
 
         e = assert_raises(StandardError) { perform_command }
@@ -64,13 +68,17 @@ module Script
 
       def test_does_not_force_push_if_user_env_already_existed
         @force = false
-        Layers::Application::ConnectApp.stubs(call: false)
+        Layers::Application::ConnectApp.stubs(env_valid?: true)
+        Forms::Connect.expects(:ask).never
+        Layers::Application::ConnectApp.expects(:call).never
         Layers::Application::PushScript.expects(:call).with(ctx: @context, force: false)
         perform_command
       end
 
       def test_force_pushes_script_if_user_env_was_just_created
         @force = false
+        Layers::Application::ConnectApp.stubs(env_valid?: false)
+        Forms::Connect.expects(:ask).returns(@form)
         Layers::Application::ConnectApp.stubs(call: true)
         Layers::Application::PushScript.expects(:call).with(ctx: @context, force: true)
         perform_command
