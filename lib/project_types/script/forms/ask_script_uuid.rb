@@ -3,7 +3,7 @@
 module Script
   module Forms
     class AskScriptUuid < ShopifyCLI::Form
-      attr_accessor :uuid
+      attr_reader :uuid
       def ask
         scripts = @xargs
         return nil unless scripts.count > 0 &&
@@ -11,7 +11,7 @@ module Script
 
         CLI::UI::Prompt.ask(ctx.message("script.application.ensure_env.ask_which_script_to_connect_to")) do |handler|
           scripts.each do |script|
-            handler.option("#{script["title"]} (#{script["uuid"]})") { self.uuid = script["uuid"] }
+            handler.option("#{script["title"]} (#{script["uuid"]})") { @uuid = script["uuid"] }
           end
         end
       end
