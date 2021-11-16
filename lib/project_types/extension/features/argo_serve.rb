@@ -95,15 +95,14 @@ module Extension
       end
 
       def new_serve_flow
-        Tasks::RunExtensionCommand.new(
+        Tasks::ExecuteCommands.serve(
           type: specification_handler.specification.identifier,
-          command: "serve",
           context: context,
-          port: port,
           config_file_name: specification_handler.server_config_file,
+          port: port,
           resource_url: resource_url,
           tunnel_url: tunnel_url
-        ).call
+        )
       end
 
       def supports_development_server?
