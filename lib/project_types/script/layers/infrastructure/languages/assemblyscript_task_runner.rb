@@ -19,11 +19,6 @@ module Script
             @script_name = script_name
           end
 
-          def build
-            compile
-            bytecode
-          end
-
           def compiled_type
             "wasm"
           end

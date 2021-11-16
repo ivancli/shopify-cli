@@ -16,6 +16,11 @@ module Script
             task_runner[language].new(ctx, script_name)
           end
 
+          def build
+            compile
+            bytecode
+          end
+
           def check_system_dependencies!
             required_tool_versions.each { |tool| check_tool_version!(tool[:tool_name], tool[:min_version]) }
           end
@@ -51,7 +56,7 @@ module Script
           def tool_version_output
             raise NotImplementedError
           end
-
+  
           private
 
           def check_tool_version!(tool, min_required_version)
@@ -62,6 +67,14 @@ module Script
             unless version >= ::Semantic::Version.new(min_required_version)
               raise Errors::MissingDependencyVersionError.new(tool, output.strip, min_required_version)
             end
+          end
+
+          def compile
+            raise NotImplementedError
+          end
+
+          def bytecode
+            raise NotImplementedError
           end
         end
       end
