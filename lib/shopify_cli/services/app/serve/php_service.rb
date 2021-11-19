@@ -23,7 +23,7 @@ module ShopifyCLI
 
             ShopifyCLI::Tasks::UpdateDashboardURLS.call(
               context,
-              url: :url,
+              url: url,
               callback_url: project.env.callback_path,
             )
 
