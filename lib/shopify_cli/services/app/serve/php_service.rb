@@ -23,8 +23,8 @@ module ShopifyCLI
 
             ShopifyCLI::Tasks::UpdateDashboardURLS.call(
               context,
-              url: url,
-              callback_url: "/auth/callback",
+              url: "#{url}/shopify/login",
+              callback_url: "/shopify/auth/callback",
             )
 
             if project.env.shop
