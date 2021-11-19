@@ -3,7 +3,7 @@ module ShopifyCLI
     module App
       module Serve
         class PHPService < BaseService
-          attr_accessor :host, :port, :context, :session_domain
+          attr_accessor :host, :port, :context, :session_domain, :login_path, :callback_path
 
           def initialize(host:, port:, context:)
             @host = host
@@ -23,12 +23,12 @@ module ShopifyCLI
 
             ShopifyCLI::Tasks::UpdateDashboardURLS.call(
               context,
-              url: "#{url}/shopify/login",
-              callback_url: "/shopify/auth/callback",
+              url: "#{url}#{:login_path}",
+              callback_url: :callback_path,
             )
 
             if project.env.shop
-              project_url = "#{project.env.host}/shopify/login?shop=#{project.env.shop}"
+              project_url = "#{project.env.host}#{:login_path}?shop=#{project.env.shop}"
               context.puts("\n" + context.message("core.app.serve.open_info", project_url) + "\n")
             end
 

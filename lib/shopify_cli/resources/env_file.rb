@@ -12,6 +12,8 @@ module ShopifyCLI
         "SCOPES" => :scopes,
         "APP_URL" => :host,
         "SESSION_DOMAIN" => :session_domain,
+        "SHOPIFY_LOGIN_PATH" => :login_path,
+        "SHOPIFY_CALLBACK_PATH" => :callback_path,
       }
 
       class << self
@@ -59,6 +61,8 @@ module ShopifyCLI
       property :scopes
       property :host
       property :session_domain
+      property :login_path
+      property :callback_path
       property :extra, default: -> { {} }
 
       def to_h
