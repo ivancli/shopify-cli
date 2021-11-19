@@ -10,7 +10,8 @@ module ShopifyCLI
         "SHOPIFY_API_SECRET" => :secret,
         "SHOP" => :shop,
         "SCOPES" => :scopes,
-        "HOST" => :host,
+        "APP_URL" => :host,
+        "SESSION_DOMAIN" => :session_domain,
       }
 
       class << self
@@ -57,6 +58,7 @@ module ShopifyCLI
       property :shop
       property :scopes
       property :host
+      property :session_domain
       property :extra, default: -> { {} }
 
       def to_h
