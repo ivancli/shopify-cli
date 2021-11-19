@@ -23,12 +23,12 @@ module ShopifyCLI
 
             ShopifyCLI::Tasks::UpdateDashboardURLS.call(
               context,
-              url: "#{url}#{:login_path}",
-              callback_url: :callback_path,
+              url: :url,
+              callback_url: project.env.callback_path,
             )
 
             if project.env.shop
-              project_url = "#{project.env.host}#{:login_path}?shop=#{project.env.shop}"
+              project_url = "#{project.env.host}#{project.env.login_path}?shop=#{project.env.shop}"
               context.puts("\n" + context.message("core.app.serve.open_info", project_url) + "\n")
             end
 
