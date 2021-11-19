@@ -13,7 +13,7 @@ module ShopifyCLI
         constructed_urls = construct_redirect_urls(app["redirectUrlWhitelist"], url, callback_url)
         return if url == app["applicationUrl"]
         ShopifyCLI::PartnersAPI.query(@ctx, "update_dashboard_urls", input: {
-          applicationUrl: consent ? "#{url}/#{project.env.login_path}" : app["applicationUrl"],
+          applicationUrl: consent ? "#{url}#{project.env.login_path}" : app["applicationUrl"],
           redirectUrlWhitelist: constructed_urls, apiKey: api_key
         })
         @ctx.puts(@ctx.message("core.tasks.update_dashboard_urls.updated"))
